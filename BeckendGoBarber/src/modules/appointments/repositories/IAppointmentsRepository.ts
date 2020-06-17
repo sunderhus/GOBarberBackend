@@ -1,0 +1,3 @@
+interface Teste{
+  name:string;
+}
