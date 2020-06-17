@@ -25,9 +25,11 @@
   "rules": {
     "class-methods-use-this":"off",
     "prettier/prettier":"error",
-    "@typescript-eslint/no-unusedvars":["error",{
-      "argsIgnorePattern":"_"
-    }],
+    "@typescript-eslint/no-unusedvars":["error",
+      {
+        "argsIgnorePattern":"_"
+      }
+    ],
     "import/extensions":[
       "error",
       "ignorePackages",
