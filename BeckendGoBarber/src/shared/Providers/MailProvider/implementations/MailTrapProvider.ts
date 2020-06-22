@@ -6,13 +6,6 @@ interface IMessage {
 }
 
 class MailTrapProvider implements IMailProvider {
-  private emails: IMessage[] = [];
-
-  public async sendMail(to: string, body: string): Promise<void> {
-    this.emails.push({
-      to,
-      body,
-    });
-  }
+  public async sendMail(to: string, body: string): Promise<void> {}
 }
 export default MailTrapProvider;
