@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/files', express.static(uploadConfig.directory));
+app.use('/files', express.static(uploadConfig.uploadsFolder));
 
 app.use(routes);
 
@@ -34,5 +34,5 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 app.listen(3333, () => {
-  console.log('server online.👍');
+  console.log('server online.  👍');
 });
