@@ -49,8 +49,6 @@ class EtherialMailProvider implements IMailProvider {
       html: await this.mailTemplateProvider.parse(templateData),
     });
 
-    console.log(`Mensagem enviada:${message.messageId}`);
-
     console.log(`Preview  ${nodemailer.getTestMessageUrl(message)}`);
   }
 }

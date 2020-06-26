@@ -1,7 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 // import AppError from '@shared/errors/AppError';
 import AppError from '@shared/errors/AppError';
-import { differenceInHours, isAfter, addHours } from 'date-fns';
+import { isAfter, addHours } from 'date-fns';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
@@ -40,10 +40,6 @@ class ResetPasswordService {
     const limitDate = addHours(tokenCreateAt, 2);
 
     if (isAfter(currentDate, limitDate)) {
-      throw new AppError('This token is already expired.');
-    }
-
-    if (differenceInHours(currentDate, tokenCreateAt) > 2) {
       throw new AppError('This token is already expired.');
     }
     user.password = await this.hashProvider.generateHash(password);
