@@ -29,7 +29,6 @@ describe('UpdateProfile', () => {
       user_id: user.id,
       name: 'John Doe',
       email: 'johndoe@gmail.com',
-      old_password: user.password,
     });
 
     expect(user.name).toBe('John Doe');
@@ -73,6 +72,41 @@ describe('UpdateProfile', () => {
         email: user.email,
         password: '223311',
         old_password: '',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able to update the password', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'Jhon Doe',
+      email: 'jhondoe@gmail.com',
+      password: '123123',
+    });
+
+    await updateProfile.execute({
+      user_id: user.id,
+      name: user.name,
+      email: user.email,
+      password: 'newPassword',
+      old_password: '123123',
+    });
+    expect(user.password).toBe('newPassword');
+  });
+
+  it('should not be able to update the password sending the wrong current password.', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'Jhon Doe',
+      email: 'jhondoe@gmail.com',
+      password: '123123',
+    });
+
+    await expect(
+      updateProfile.execute({
+        user_id: user.id,
+        name: user.name,
+        email: user.email,
+        password: 'newPassword',
+        old_password: '123321',
       })
     ).rejects.toBeInstanceOf(AppError);
   });

@@ -26,8 +26,8 @@ class UpdateProfileService {
     user_id,
     name,
     email,
-    old_password,
     password,
+    old_password,
   }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
 
@@ -41,15 +41,26 @@ class UpdateProfileService {
       throw new AppError('This email is already used.');
     }
 
-    if (!old_password) {
+    if (password && !old_password) {
       throw new AppError('Please, inform the current password.');
     }
 
-    if (password) {
-      user.password = await this.hashProvider.generateHash(user.password);
+    if (password && old_password) {
+      const checkOldPassword = await this.hashProvider.compareHash(
+        old_password,
+        user.password
+      );
+
+      if (!checkOldPassword) {
+        throw new AppError('Wrong current password.');
+      }
+
+      const newHashedPassword = await this.hashProvider.generateHash(password);
+      user.password = newHashedPassword;
     }
 
-    Object.assign(user, { name, email });
+    user.name = name;
+    user.email = email;
 
     return this.usersRepository.save(user);
   }
