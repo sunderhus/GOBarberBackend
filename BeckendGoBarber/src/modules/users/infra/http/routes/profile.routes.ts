@@ -6,6 +6,6 @@ import ProfileController from '../controllers/ProfileController';
 const usersRouter = Router();
 const profileController = new ProfileController();
 
-usersRouter.patch('/profile', ensureAuthenticated, profileController.update);
+usersRouter.put('/', ensureAuthenticated, profileController.update);
 
 export default usersRouter;
