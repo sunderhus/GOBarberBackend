@@ -22,11 +22,31 @@ class UpdateProfileService {
     private hashProvider: IHasProvider
   ) {}
 
-  public async execute({ user_id, name, email }: IRequest): Promise<User> {
+  public async execute({
+    user_id,
+    name,
+    email,
+    old_password,
+    password,
+  }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
       throw new AppError('User not found');
+    }
+
+    const userWithUpdatedEmail = await this.usersRepository.findByEmail(email);
+
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+      throw new AppError('This email is already used.');
+    }
+
+    if (!old_password) {
+      throw new AppError('Please, inform the current password.');
+    }
+
+    if (password) {
+      user.password = await this.hashProvider.generateHash(user.password);
     }
 
     Object.assign(user, { name, email });

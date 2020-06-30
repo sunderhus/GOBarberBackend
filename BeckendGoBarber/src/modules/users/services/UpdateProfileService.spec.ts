@@ -1,4 +1,4 @@
-// import AppError from '@shared/errors/AppError';
+import AppError from '@shared/errors/AppError';
 import FakeUserRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 
 import UpdateProfileService from './UpdateProfileService';
@@ -29,11 +29,51 @@ describe('UpdateProfile', () => {
       user_id: user.id,
       name: 'John Doe',
       email: 'johndoe@gmail.com',
+      old_password: user.password,
     });
 
     expect(user.name).toBe('John Doe');
     expect(user.email).toBe('johndoe@gmail.com');
   });
 
-  it('should not be able to update to a email already taken by another user.', async () => {});
+  it('should not be able to update to a email already taken by another user.', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'Matheus',
+      email: 'mcs_sun@hotmail.com',
+      password: '123123',
+    });
+
+    await fakeUserRepository.create({
+      name: 'Priscila',
+      email: 'pfelippetto@gmail.com',
+      password: '123123',
+    });
+
+    await expect(
+      updateProfile.execute({
+        user_id: user.id,
+        name: user.name,
+        email: 'pfelippetto@gmail.com',
+        old_password: user.password,
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to change the password to a new one, without send the current password.', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'John Doe',
+      email: 'johndoe@gmail.com',
+      password: '123123',
+    });
+
+    await expect(
+      updateProfile.execute({
+        user_id: user.id,
+        name: user.name,
+        email: user.email,
+        password: '223311',
+        old_password: '',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
 });
