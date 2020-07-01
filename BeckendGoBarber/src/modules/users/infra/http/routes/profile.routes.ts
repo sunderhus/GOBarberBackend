@@ -3,9 +3,12 @@ import { Router } from 'express';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import ProfileController from '../controllers/ProfileController';
 
-const usersRouter = Router();
+const profileRouter = Router();
 const profileController = new ProfileController();
 
-usersRouter.put('/', ensureAuthenticated, profileController.update);
+profileRouter.use(ensureAuthenticated);
 
-export default usersRouter;
+profileRouter.get('/show', profileController.show);
+profileRouter.put('/', profileController.update);
+
+export default profileRouter;
