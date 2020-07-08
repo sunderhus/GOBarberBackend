@@ -49,7 +49,6 @@ class ListProviderMonthAvailabilityService {
         available: appointmentsInDay.length < 10,
       };
     });
-    console.debug(avialability);
 
     return avialability;
   }
