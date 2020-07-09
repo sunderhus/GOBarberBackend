@@ -13,7 +13,7 @@ import INotificationsRepository from '@modules/notifications/repositories/INotif
 import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository';
 
 import '@modules/users/providers/';
-import '@shared/providers';
+import '@shared/container/providers';
 
 container.registerSingleton<IAppointmentsRepository>(
   'AppointmentsRepository',

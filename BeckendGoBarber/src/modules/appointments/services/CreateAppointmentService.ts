@@ -57,12 +57,12 @@ class CreateAppointmentService {
       date: appointmentDate,
     });
 
-    // const dateFormatted = format(appointmentDate, "dd/MM/YYYY 'às' HH:mm'h'");
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
 
-    // await this.notificationsRepository.create({
-    //   recipient_id: provider_id,
-    //   content: `Novo agendamento para o dia ${dateFormatted}`,
-    // });
+    await this.notificationsRepository.create({
+      recipient_id: provider_id,
+      content: `Novo agendamento para o dia ${dateFormatted}`,
+    });
 
     return appointment;
   }
