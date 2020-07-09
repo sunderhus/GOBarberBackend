@@ -2,14 +2,20 @@ import AppError from '@shared/errors/AppError';
 
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
+import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 
 let fakeAppointmentRepository: FakeAppointmentsRepository;
+let fakeNotificationsRepository: FakeNotificationsRepository;
 let createAppointment: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
   beforeEach(() => {
     fakeAppointmentRepository = new FakeAppointmentsRepository();
-    createAppointment = new CreateAppointmentService(fakeAppointmentRepository);
+    fakeNotificationsRepository = new FakeNotificationsRepository();
+    createAppointment = new CreateAppointmentService(
+      fakeAppointmentRepository,
+      fakeNotificationsRepository
+    );
   });
 
   it('should be able to create a new appointment', async () => {
@@ -94,5 +100,20 @@ describe('CreateAppointment', () => {
         provider_id: 'other_id',
       })
     ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able to send a notification to respective provider when a new job has been booked to him', async () => {
+    const create = jest.spyOn(fakeNotificationsRepository, 'create');
+
+    await createAppointment.execute({
+      date: new Date(2020, 4, 10, 13),
+      user_id: '4321',
+      provider_id: '12345',
+    });
+
+    expect(create).toBeCalledWith({
+      content: 'Novo agendamento para o dia 10/05/2020 às 13:00h',
+      recipient_id: '12345',
+    });
   });
 });
