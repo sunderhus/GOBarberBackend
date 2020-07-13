@@ -7,7 +7,7 @@ export default class ResetPasswordController {
   async create(request: Request, response: Response): Promise<Response> {
     const { password, token } = request.body;
 
-    const resetPassword = await container.resolve(ResetPasswordService);
+    const resetPassword = container.resolve(ResetPasswordService);
 
     await resetPassword.execute({ password, token });
 
