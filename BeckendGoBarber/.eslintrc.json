@@ -24,8 +24,9 @@
     "no-underscore-dangle": "off",
     "prettier/prettier": "error",
     "class-methods-use-this": "off",
-    "@typescript-eslint/camelcase": "off",
+    "camelcase": "off",
     "no-useless-constructor":"off",
+    "eslint-disable-next-line":"off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
