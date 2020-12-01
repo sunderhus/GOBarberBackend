@@ -26,6 +26,10 @@ export default function ensureAuthenticated(
   const { secret } = authConfig.jwt;
   const [, token] = authHeader.split(' ');
 
+  if (!secret) {
+    throw new AppError('Fail on create a new authentication');
+  }
+
   try {
     const decodedToken = verify(token, secret);
 
