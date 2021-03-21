@@ -21,6 +21,7 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
+    "no-delete-var":"warn",
     "no-underscore-dangle": "off",
     "prettier/prettier": "error",
     "class-methods-use-this": "off",
