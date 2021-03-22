@@ -9,7 +9,7 @@ interface IMessage {
   body: string;
 }
 @injectable()
-class EtherialMailProvider implements IMailProvider {
+class EtherealMailProvider implements IMailProvider {
   private cliente: Transporter;
 
   constructor(
@@ -52,4 +52,4 @@ class EtherialMailProvider implements IMailProvider {
     console.log(`Preview  ${nodemailer.getTestMessageUrl(message)}`);
   }
 }
-export default EtherialMailProvider;
+export default EtherealMailProvider;
