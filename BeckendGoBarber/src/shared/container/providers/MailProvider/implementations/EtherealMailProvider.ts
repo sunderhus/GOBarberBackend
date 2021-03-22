@@ -10,10 +10,10 @@ interface IMessage {
 }
 @injectable()
 class EtherealMailProvider implements IMailProvider {
-  private cliente: Transporter;
+  private client: Transporter;
 
   constructor(
-    @inject('TemplateMailProvider')
+    @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider
   ) {
     nodemailer.createTestAccount().then(account => {
@@ -26,7 +26,7 @@ class EtherealMailProvider implements IMailProvider {
           pass: account.pass,
         },
       });
-      this.cliente = transporter;
+      this.client = transporter;
     });
   }
 
@@ -36,7 +36,7 @@ class EtherealMailProvider implements IMailProvider {
     subject,
     templateData,
   }: ISendMailDTO): Promise<void> {
-    const message = await this.cliente.sendMail({
+    const message = await this.client.sendMail({
       from: {
         name: from?.name || 'Equipe GoBarber',
         address: from?.email || 'contato@gobarber.com.br',
