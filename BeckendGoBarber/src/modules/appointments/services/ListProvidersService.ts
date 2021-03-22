@@ -20,6 +20,10 @@ class ListProviderService {
       exceptUserId: user_id,
     });
 
+    users.forEach(provider => {
+      delete provider.password;
+    });
+
     if (users.length === 0) {
       throw new AppError('Providers not found.');
     }
