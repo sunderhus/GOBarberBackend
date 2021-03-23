@@ -1,7 +1,7 @@
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
-import { classToClass } from 'class-transformer';
+import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 
 interface IRequest {
@@ -28,9 +28,11 @@ class ListProviderService {
         exceptUserId: user_id,
       });
 
-      console.log('a query no banco foi feita');
-
       await this.cacheProvider.save(`providers-list:${user_id}`, users);
+    }
+
+    if (users.length === 0) {
+      throw new AppError('Providers not found.');
     }
 
     return users;

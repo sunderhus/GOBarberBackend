@@ -35,5 +35,5 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 app.listen(3333, () => {
-  console.log('server online.  👍');
+  console.log('%cServer online. 👍', 'color:green');
 });
