@@ -67,4 +67,33 @@ describe('ListProviders', () => {
     expect(providers).not.toHaveLength(3);
     expect(providers).toEqual([providerUser1, providerUser2]);
   });
+  it('should be able to list all  providers except the  logged in provider from cache', async () => {
+    const recoverFromCache = jest.spyOn(fakeCacheProvider, 'recover');
+    const saveInCache = jest.spyOn(fakeCacheProvider, 'save');
+
+    await fakeUsersRepository.create({
+      name: 'provider user 1',
+      email: 'p1@gmail.com',
+      password: '123123',
+    });
+
+    await fakeUsersRepository.create({
+      name: 'provider user 2',
+      email: 'p2@gmail.com',
+      password: '123123',
+    });
+
+    const loggedUser = await fakeUsersRepository.create({
+      name: 'user',
+      email: 'user@gmail.com',
+      password: '123123',
+    });
+
+    await listProviders.execute({ user_id: loggedUser.id });
+    await listProviders.execute({ user_id: loggedUser.id });
+    await listProviders.execute({ user_id: loggedUser.id });
+
+    expect(saveInCache).toBeCalledTimes(1);
+    expect(recoverFromCache).toBeCalledTimes(3);
+  });
 });
