@@ -44,12 +44,6 @@ describe('ListProviderAppointmentsService', () => {
     const recoverFromCache = jest.spyOn(fakeCacheProvider, 'recover');
     const saveInCache = jest.spyOn(fakeCacheProvider, 'save');
 
-    const availability = await listProviderAppointments.execute({
-      day: 20,
-      month: 4,
-      year: 2022,
-      provider_id: 'provider',
-    });
     await listProviderAppointments.execute({
       day: 20,
       month: 4,
@@ -63,8 +57,14 @@ describe('ListProviderAppointmentsService', () => {
       provider_id: 'provider',
     });
 
-    expect(availability).toEqual([]);
+    await listProviderAppointments.execute({
+      day: 21,
+      month: 4,
+      year: 2022,
+      provider_id: 'provider',
+    });
+
     expect(recoverFromCache).toBeCalledTimes(3);
-    expect(saveInCache).toBeCalledTimes(1);
+    expect(saveInCache).toBeCalledTimes(2);
   });
 });
