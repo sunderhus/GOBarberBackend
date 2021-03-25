@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import { addDays, getDate, getDay, startOfHour } from 'date-fns';
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import ListProviderMonthAvailabilityService from './ListProviderMonthAvailabilityService';
 
@@ -19,8 +19,9 @@ describe('ListProviderMonthAvailability', () => {
       .split('/')
       .map(date => Number(date));
 
-    const yesterday = currentDay - 1;
-    const tomorrow = currentDay + 1;
+    const yesterday = getDate(addDays(new Date(), -1));
+
+    const tomorrow = getDate(addDays(new Date(), 1));
 
     await fakeAppointmentsRepository.create({
       provider_id: '123123',
