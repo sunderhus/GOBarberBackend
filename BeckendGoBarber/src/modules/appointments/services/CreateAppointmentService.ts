@@ -1,7 +1,7 @@
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import AppError from '@shared/errors/AppError';
-import { format, getHours, isBefore, startOfHour } from 'date-fns';
+import { addMonths, format, getHours, isBefore, startOfHour } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
@@ -31,12 +31,12 @@ class CreateAppointmentService {
     const appointmentDate = startOfHour(date);
     const currentDate = new Date(Date.now());
 
-    if (user_id === provider_id) {
-      throw new AppError('You can not create an appointment with yourself.');
-    }
-
     if (isBefore(appointmentDate, currentDate)) {
       throw new AppError("You can't create a appointment on a past date.");
+    }
+
+    if (user_id === provider_id) {
+      throw new AppError('You can not create an appointment with yourself.');
     }
 
     if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
@@ -45,12 +45,12 @@ class CreateAppointmentService {
       );
     }
 
-    const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
+    const isSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
       provider_id
     );
 
-    if (findAppointmentInSameDate) {
+    if (isSameDate) {
       throw new AppError('This appointment is already booked');
     }
 
