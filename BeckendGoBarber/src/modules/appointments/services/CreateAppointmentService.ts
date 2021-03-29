@@ -1,7 +1,14 @@
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import AppError from '@shared/errors/AppError';
-import { addMonths, format, getHours, isBefore, startOfHour } from 'date-fns';
+import {
+  differenceInSeconds,
+  format,
+  getHours,
+  isBefore,
+  isSameDay,
+  startOfHour,
+} from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
@@ -31,7 +38,16 @@ class CreateAppointmentService {
     const appointmentDate = startOfHour(date);
     const currentDate = new Date(Date.now());
 
-    if (isBefore(appointmentDate, currentDate)) {
+    const isPastHour = differenceInSeconds(date, currentDate) <= 0;
+
+    if (isSameDay(date, currentDate) && isPastHour) {
+      throw new AppError("You can't create a appointment on a past time.");
+    }
+
+    if (
+      isBefore(appointmentDate, currentDate) &&
+      !isSameDay(appointmentDate, currentDate)
+    ) {
       throw new AppError("You can't create a appointment on a past date.");
     }
 

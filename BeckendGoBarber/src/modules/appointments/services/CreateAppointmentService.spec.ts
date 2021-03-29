@@ -28,7 +28,7 @@ describe('CreateAppointment', () => {
     });
 
     const appointment = await createAppointment.execute({
-      date: new Date(2020, 4, 10, 13),
+      date: new Date(2020, 4, 11, 13),
       user_id: '4321',
       provider_id: '12345',
     });
@@ -63,7 +63,21 @@ describe('CreateAppointment', () => {
 
     await expect(
       createAppointment.execute({
-        date: new Date(2020, 4, 10, 11),
+        date: new Date(2020, 4, 5, 12),
+        user_id: '4321',
+        provider_id: '12345',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a appointment on a past hour in current day.', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2020, 4, 10, 12, 0, 0).getTime();
+    });
+
+    await expect(
+      createAppointment.execute({
+        date: new Date(2020, 4, 10, 11, 0, 0),
         user_id: '4321',
         provider_id: '12345',
       })
@@ -109,8 +123,12 @@ describe('CreateAppointment', () => {
   it('should be able to send a notification to respective provider when a new job has been booked to him', async () => {
     const create = jest.spyOn(fakeNotificationsRepository, 'create');
 
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2020, 4, 10, 10, 0, 0).getTime();
+    });
+
     await createAppointment.execute({
-      date: new Date(2020, 4, 10, 13),
+      date: new Date(2020, 4, 10, 13, 0, 0),
       user_id: '4321',
       provider_id: '12345',
     });
