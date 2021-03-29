@@ -9,7 +9,7 @@ interface IRequest {
   user_id: string;
   name: string;
   email: string;
-  old_password?: string;
+  oldPassword?: string;
   password?: string;
 }
 
@@ -27,7 +27,7 @@ class UpdateProfileService {
     name,
     email,
     password,
-    old_password,
+    oldPassword,
   }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
 
@@ -41,13 +41,13 @@ class UpdateProfileService {
       throw new AppError('This email is already used.');
     }
 
-    if (password && !old_password) {
+    if (password && !oldPassword) {
       throw new AppError('Please, inform the current password.');
     }
 
-    if (password && old_password) {
+    if (password && oldPassword) {
       const checkOldPassword = await this.hashProvider.compareHash(
-        old_password,
+        oldPassword,
         user.password
       );
 

@@ -53,7 +53,7 @@ describe('UpdateProfile', () => {
         user_id: user.id,
         name: user.name,
         email: 'pfelippetto@gmail.com',
-        old_password: user.password,
+        oldPassword: user.password,
       })
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -71,7 +71,7 @@ describe('UpdateProfile', () => {
         name: user.name,
         email: user.email,
         password: '223311',
-        old_password: '',
+        oldPassword: '',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -88,7 +88,7 @@ describe('UpdateProfile', () => {
       name: user.name,
       email: user.email,
       password: 'newPassword',
-      old_password: '123123',
+      oldPassword: '123123',
     });
     expect(user.password).toBe('newPassword');
   });
@@ -106,7 +106,7 @@ describe('UpdateProfile', () => {
         name: user.name,
         email: user.email,
         password: 'newPassword',
-        old_password: '123123',
+        oldPassword: '123123',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -124,7 +124,7 @@ describe('UpdateProfile', () => {
         name: user.name,
         email: user.email,
         password: 'newPassword',
-        old_password: '123321',
+        oldPassword: '123321',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
