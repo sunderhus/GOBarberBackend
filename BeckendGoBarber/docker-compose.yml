@@ -1,0 +1,30 @@
+version : '3'
+
+services:
+  postgresdb:
+    image: postgres
+    environment:
+      - POSTGRES_DB=gostack_gobarber
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+    ports:
+        - 5432:5432
+    networks:
+      - gostack_network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+        - 27017:27017
+    networks:
+      - gostack_network
+
+  redis:
+    image: redis:alpine
+    ports:
+        - 6379:6379
+    networks:
+      - gostack_network
+
+networks:
+  gostack_network:
